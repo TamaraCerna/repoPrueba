@@ -1,0 +1,61 @@
+========================================================
+  CREDENCIALES Y DATOS DEL LAB
+========================================================
+
+RED DEL LAB
+-----------
+Segmento:        158.170.12.x
+PC alumno:       158.170.12.118
+Servidor Wazuh:  158.170.12.112
+Gateway:         158.170.12.1
+
+
+ACCESO SSH AL SERVIDOR (informativo, no necesario para la app)
+--------------------------------------------------------------
+Host:      158.170.12.112
+Puerto:    22
+Usuario:   devsecops3
+Contrasena: usuariocontraseña
+
+Verificacion:
+  ssh devsecops3@158.170.12.112
+
+
+WAZUH INDEXER (OpenSearch) — puerto 9200
+-----------------------------------------
+URL:       https://158.170.12.112:9200
+Usuario:   usuario1
+Contrasena: usuariocontraseña
+
+NOTA: la contraseña tiene ñ. En application.properties
+escribirla como ñ (Unicode escape).
+
+Verificacion con Python:
+  python check_agents.py
+
+
+WAZUH MANAGER API — puerto 55000
+----------------------------------
+Estado: NO DISPONIBLE en el lab.
+El servicio no esta corriendo en el servidor.
+
+
+WAZUH DASHBOARD
+----------------
+URL: https://158.170.12.112
+(interfaz web visual de Wazuh)
+
+
+DATOS REALES CONFIRMADOS
+--------------------------
+Cluster:               wazuh-cluster
+Nodo:                  node-1
+Version OpenSearch:    7.10.2
+Total vulnerabilidades: ~19.000
+Agentes registrados:   9 (IDs: 006, 009, 010, 011, 012, 013, 016, 017, 018)
+========================================================
+
+Revisar JWT
+
+$creds = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("usuario1:usuariocontraseña"))
+Invoke-RestMethod -Uri "https://158.170.12.112:9200/_plugins/_security/authinfo" -Headers @{Authorization="Basic $creds"} -SkipCertificateCheck

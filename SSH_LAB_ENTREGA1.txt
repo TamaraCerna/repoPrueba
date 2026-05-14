@@ -1,0 +1,69 @@
+========================================================
+  ENTREGA 1 — CONEXION AL LAB (WAZUH REAL)
+========================================================
+
+RESULTADO FINAL
+---------------
+Conexion directa al Wazuh del lab sin SSH.
+El puerto 9200 (OpenSearch/Indexer) es accesible directamente
+desde la red del lab (158.170.12.x).
+
+
+CREDENCIALES DEL LAB
+---------------------
+Servidor Wazuh:  158.170.12.112
+SSH usuario:     devsecops3
+SSH contrasena:  usuariocontraseña  (SSH no necesario para la app)
+
+Wazuh Indexer (OpenSearch):
+  Puerto:        9200
+  Usuario:       usuario1
+  Contrasena:    usuariocontraseña
+
+Wazuh Manager API (puerto 55000): NO DISPONIBLE en el lab.
+
+
+CONFIGURACION EN application.properties
+-----------------------------------------
+wazuh.ssh.enabled=false
+wazuh.indexer.remote-host=158.170.12.112
+wazuh.indexer.remote-port=9200
+wazuh.indexer.user=usuario1
+wazuh.indexer.password=usuariocontraña
+
+NOTA: la ñ se escribe como ñ en el archivo .properties
+
+
+LEVANTAR LA APLICACION
+------------------------
+PowerShell:
+
+  $env:JAVA_HOME = "C:\Program Files\JetBrains\IntelliJ IDEA 2025.2.4\jbr"
+  & "C:\Users\brand\.m2\wrapper\dists\apache-maven-3.9.12-bin\5nmfsn99br87k5d4ajlekdq10k\apache-maven-3.9.12\bin\mvn.cmd" `
+    -f "C:\Users\brand\Desktop\test\VulnChecker\vulncheck\pom.xml" `
+    spring-boot:run
+
+
+URLS DE DEMO (PC alumno)
+--------------------------
+http://localhost:8743/api/wazuh/info
+http://localhost:8743/api/wazuh/vulnerabilities?severity=Critical&size=10
+http://localhost:8743/api/wazuh/vulnerabilities?severity=High&size=20
+http://localhost:8743/api/wazuh/vulnerabilities?agente=013
+
+
+URLS DE DEMO (desde otro PC del lab)
+--------------------------------------
+http://158.170.12.118:8743/api/wazuh/info
+http://158.170.12.118:8743/api/wazuh/vulnerabilities?severity=Critical&size=10
+
+
+CHECKLIST PARA LA PRESENTACION
+--------------------------------
+[x] Conectado a la red del lab con cable
+[x] application.properties con IP y credenciales del lab
+[x] App levantada (spring-boot:run)
+[x] GET /api/wazuh/info → "CONECTADO" con version y 9 agentes
+[x] GET /api/wazuh/vulnerabilities?severity=Critical → datos reales
+[x] Accesible desde PC del docente en 158.170.12.118:8743
+========================================================

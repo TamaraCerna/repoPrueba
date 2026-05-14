@@ -12,6 +12,12 @@ pipeline {
 
     stages {
 
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Build') {
             steps {
                 sh 'mvn clean compile -DskipTests'
@@ -24,7 +30,8 @@ pipeline {
             }
             post {
                 always {
-                    junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
+                    junit allowEmptyResults: true,
+                          testResults: '**/target/surefire-reports/*.xml'
                 }
             }
         }
@@ -44,15 +51,15 @@ pipeline {
                 }
             }
         }
-
     }
 
     post {
         success {
-            echo 'Pipeline exitoso — Middleware VulnChecker listo'
+            echo 'Pipeline exitoso - Middleware VulnChecker listo'
         }
+
         failure {
-            echo 'Pipeline fallido — revisar logs y quality gate'
+            echo 'Pipeline fallido - revisar logs y Quality Gate'
         }
     }
 }

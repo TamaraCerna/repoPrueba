@@ -20,26 +20,32 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean compile -DskipTests'
+                dir('vulncheck') {
+                    sh 'mvn clean compile -DskipTests'
+                }
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                dir('vulncheck') {
+                    sh 'mvn test'
+                }
             }
             post {
                 always {
                     junit allowEmptyResults: true,
-                          testResults: '**/target/surefire-reports/*.xml'
+                          testResults: 'vulncheck/**/target/surefire-reports/*.xml'
                 }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar'
+                dir('vulncheck') {
+                    withSonarQubeEnv('SonarQube') {
+                        sh 'mvn sonar:sonar'
+                    }
                 }
             }
         }
